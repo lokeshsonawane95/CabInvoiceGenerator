@@ -35,7 +35,7 @@ namespace CabInvoiceGeneretorMSTest
             Assert.AreEqual(expectedSummary, summary);
         }
 
-        //UC3 Invoice sum
+        //UC3 Invoice summary with average fare
         [TestMethod]
         public void GivenMultipleRidesShouldReturnInvoiceSummaryAndAverangeFare()
         {
@@ -44,6 +44,24 @@ namespace CabInvoiceGeneretorMSTest
 
             InvoiceSummary summary = invoiceGenerator.CalculateFare(rides);
             InvoiceSummary expectedSummary = new InvoiceSummary(2, 60.0);
+
+            Assert.AreEqual(expectedSummary, summary);
+        }
+
+        //UC4 Given userId should return Invoice Summary
+        [TestMethod]
+        public void GivenUserIdShouldReturnInvoice()
+        {
+            InvoiceGenerator invoiceGenerator = new InvoiceGenerator(RideType.NORMAL);
+            Ride[] rides = { new Ride(2.0, 5), new Ride(0.1, 1) };
+            string userId = "001";
+            invoiceGenerator.AddRides(userId, rides);
+            string userIdForSecondUser = "002";
+            Ride[] ridesForSeconndUser = { new Ride(3.0, 10), new Ride(1.0, 2) };
+            invoiceGenerator.AddRides(userIdForSecondUser, ridesForSeconndUser);
+
+            InvoiceSummary summary = invoiceGenerator.GetInvoiceSummary(userId);
+            InvoiceSummary expectedSummary = new InvoiceSummary(2, 30.0);
 
             Assert.AreEqual(expectedSummary, summary);
         }
